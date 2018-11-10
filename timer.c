@@ -7,6 +7,11 @@
  *      Author: alex
  */
 
+uint16_t a_count = 0;
+uint16_t b_count = 0;
+uint16_t c_count = 0;
+
+
 void configure_clocks(void){
     //set the core voltage higher to support higher clock frequency
     PCM->CTL0 |= PCM_CTL0_AMR__AM_LDO_VCORE1;
@@ -46,17 +51,20 @@ void TA0_0_IRQHandler(void){
 
     if(TIMER_A0->CCTL[0] & BIT0){
         P6->OUT |= BIT0;            //write the pin high at beginning of cycle
+        a_count++;
         TIMER_A0->CCTL[0] &= ~BIT0;
         TIMER_A0->R = 0;
     }
     //for logic low
     if(TIMER_A0->CCTL[1] & BIT0){
         P6->OUT &= ~BIT0;            //write the pin low for logic low
+        b_count++;
         TIMER_A0->CCTL[1] &= ~BIT0;
     }
     //for logic high
     if(TIMER_A0->CCTL[2] & BIT0){
         P6->OUT &= ~BIT0;            //write the pin low for logic high
+        c_count++;
         TIMER_A0->CCTL[2] &= ~BIT0;
     }
 }
