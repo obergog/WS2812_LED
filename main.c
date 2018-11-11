@@ -30,14 +30,10 @@ void main(void)
     TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIE;
     TIMER_A0->CCTL[2] &= ~TIMER_A_CCTLN_CCIE;
 #endif USE_TIMER
-
+    //write_led_color(0x000000);
+    //write_led_color(0x0000FF);
+    hold_led_state();
     while(1){
-#ifdef USE_SYSTICK
-        SysTick->VAL = 60;
-        P6->OUT |= BIT0;
-        while(SysTick->VAL > (60-34));
-        P6->OUT &= ~BIT0;
-        while(SysTick->VAL > 0);
-#endif
+
     }
 }
