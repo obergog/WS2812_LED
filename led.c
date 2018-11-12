@@ -15,7 +15,7 @@ const uint8_t logic_low_time = 17;
 void write_led_color(uint32_t color){
     uint8_t i = 0;
     for(i = 0; i < 24; i++){
-        if((color >> (31 - i)) & ((uint32_t)1 << i)){
+        if(color & (1 << i)){
             write_logic_high();
         }
         else{

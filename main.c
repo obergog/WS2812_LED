@@ -30,8 +30,8 @@ void main(void)
     TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIE;
     TIMER_A0->CCTL[2] &= ~TIMER_A_CCTLN_CCIE;
 #endif USE_TIMER
-    //write_led_color(0x000000);
-    //write_led_color(0x0000FF);
+    write_led_color(0x00FF00);
+    write_led_color(0x0000FF);
     hold_led_state();
     while(1){
 
