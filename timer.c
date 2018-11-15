@@ -1,5 +1,5 @@
 #include "msp.h"
-#include "timer.h"
+#include "led.h"
 /*
  * timer.c
  *
@@ -35,13 +35,14 @@ void timer_A0_config(void){
     TIMER_A0->CCR[0] = 60;      //Total period = 1.25us
     TIMER_A0->CCR[1] = 17;      //time for logic 0 = .35us
     TIMER_A0->CCR[2] = 34;      //time for logic 1 = .7us
-    TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE;   // TACCR0 interrupt disabled
+    TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE;   // TACCR0 interrupt enabled
     //TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIE;   // TACCR0 interrupt disabled
-    TIMER_A0->CCTL[1] = ~0;
-    TIMER_A0->CCTL[2] = TIMER_A_CCTLN_CCIE;   // TACCR0 interrupt disabled
+    TIMER_A0->CCTL[1] = 0;
+    TIMER_A0->CCTL[2] = TIMER_A_CCTLN_CCIE;   // TACCR2 interrupt enabled
 
     /* Enable Interrupts in the NVIC */
     NVIC_EnableIRQ(TA0_0_IRQn);
+
 }
 
 void configure_systick(void){
@@ -57,10 +58,6 @@ void TA0_0_IRQHandler(void){
         TIMER_A0->CCTL[0] &= ~BIT0;
         //TIMER_A0->R = 0;                    //reset count
     }
-
-}
-
-void TA0_N_IRQHandler(void){
     //for logic low
     if(TIMER_A0->CCTL[1] & BIT0){
         P6->OUT &= ~BIT0;            //write the pin low for logic low
@@ -74,3 +71,4 @@ void TA0_N_IRQHandler(void){
         TIMER_A0->CCTL[2] &= ~BIT0;
     }
 }
+

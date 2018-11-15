@@ -126,34 +126,34 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-WS28_GCC_Fix.out \
+WS28_LED.out \
 
 EXE_OUTPUTS__QUOTED += \
-"WS28_GCC_Fix.out" \
+"WS28_LED.out" \
 
 BIN_OUTPUTS += \
-WS28_GCC_Fix.hex \
+WS28_LED.hex \
 
 BIN_OUTPUTS__QUOTED += \
-"WS28_GCC_Fix.hex" \
+"WS28_LED.hex" \
 
 
 # All Target
 all: $(OBJS) $(LDS_SRCS) $(GEN_CMDS)
-	@$(MAKE) --no-print-directory -Onone "WS28_GCC_Fix.out"
+	@$(MAKE) --no-print-directory -Onone "WS28_LED.out"
 
 # Tool invocations
-WS28_GCC_Fix.out: $(OBJS) $(LDS_SRCS) $(GEN_CMDS)
+WS28_LED.out: $(OBJS) $(LDS_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: GNU Linker'
-	"/opt/ti/ccsv8/tools/compiler/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-gcc" -D__MSP432P401R__ -Dgcc -Og -g -gdwarf-3 -gstrict-dwarf -Wall -march=armv7e-m -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wl,-Map,"WS28_GCC_Fix.map" -mthumb -g -gstrict-dwarf -Wall -o"WS28_GCC_Fix.out" $(ORDERED_OBJS)
+	"/opt/ti/ccsv8/tools/compiler/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-gcc" -D__MSP432P401R__ -Dgcc -Og -g -gdwarf-3 -gstrict-dwarf -Wall -march=armv7e-m -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wl,-Map,"WS28_LED.map" -mthumb -g -gstrict-dwarf -Wall -o"WS28_LED.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
-WS28_GCC_Fix.hex: $(EXE_OUTPUTS)
+WS28_LED.hex: $(EXE_OUTPUTS)
 	@echo 'Building files: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo 'Invoking: GNU Objcopy Utility'
-	"/opt/ti/ccsv8/tools/compiler/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-objcopy"  $(EXE_OUTPUTS__QUOTED) "WS28_GCC_Fix.hex"
+	"/opt/ti/ccsv8/tools/compiler/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-objcopy"  $(EXE_OUTPUTS__QUOTED) "WS28_LED.hex"
 	@echo 'Finished building: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo ' '
 

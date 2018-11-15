@@ -17,8 +17,11 @@ uint8_t low_count = 0;
 //write a color to one LED
 void write_led_color(uint32_t color){
     uint8_t i = 0;
+    TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIE;   // TACCR0 interrupt enabled
+
     for(i = 0; i < 24; i++){
         if(color & (1 << i)){
+
             write_logic_high();
             high_count++;
         }
@@ -31,27 +34,20 @@ void write_led_color(uint32_t color){
 
 //write logic high
 void write_logic_high(void){
-#ifdef USE_SYSTICK
-    SysTick->VAL = period;
-    P6->OUT |= BIT0;
-    while(SysTick->VAL > (period - logic_high_time));
-    P6->OUT &= ~BIT0;
-    while(SysTick->VAL > 0);
-#endif
+    TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIE;   // TACCR0 interrupt enabled
+    TIMER_A0->CCTL[2] &= ~TIMER_A_CCTLN_CCIE;   // TACCR2 enabled
+
 }
 
 //write logic low
 void write_logic_low(void){
-#ifdef USE_SYSTICK
-    SysTick->VAL = period;
-    P6->OUT |= BIT0;
-    while(SysTick->VAL > (period - logic_low_time));
-    P6->OUT &= ~BIT0;
-    while(SysTick->VAL > 0);
-#endif
+
 }
 
 //hold current LED strip state
 void hold_led_state(void){
+    TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIE;   // TACCR0 interrupt disabled
+    TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIE;   // TACCR0 interrupt disabled
+    TIMER_A0->CCTL[2] &= ~TIMER_A_CCTLN_CCIE;   // TACCR0 interrupt disabled
     P6->OUT &= ~BIT0;
 }

@@ -1,6 +1,5 @@
 #include "msp.h"
 #include "core_cm4.h"
-#include "timer.h"
 #include <stdint.h>
 #include "led.h"
 
@@ -39,10 +38,8 @@ void main(void)
     //hold_led_state();
     while(1){
         if(a_count > 24){
-            __disable_irq();
-            TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIE;   // TACCR0 interrupt disabled
+            hold_led_state();
         }
-        hold_led_state();
 
     }
 }
