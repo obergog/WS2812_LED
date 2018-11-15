@@ -11,7 +11,8 @@
 #define LED_H_
 
 uint16_t a_count;
-
+uint8_t color_array[24];
+uint8_t color_index;
 //timer functions
 void configure_clocks(void);
 void timer_A0_config(void);

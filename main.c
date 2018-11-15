@@ -9,7 +9,6 @@
 
 #define ENABLE_SLEEPONEXIT (0x00000002)
 
-//#define USE_SYSTICK
 #define USE_TIMER
 void main(void)
 {
@@ -33,13 +32,10 @@ void main(void)
 
     SCB->SCR &= ~ENABLE_SLEEPONEXIT;            //wake up on exit from ISR
 
-    //write_led_color(0x00FF00);
-    //write_led_color(0x0000FF);
-    //hold_led_state();
+    write_led_color(0x000000);
+    write_led_color(0x0000FF);
+    hold_led_state();
     while(1){
-        if(a_count > 24){
-            hold_led_state();
-        }
 
     }
 }

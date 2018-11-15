@@ -34,11 +34,8 @@ void timer_A0_config(void){
     TIMER_A0->CTL = TIMER_A_CTL_SSEL__SMCLK | TIMER_A_CTL_MC__UP | TIMER_A_CTL_ID_0 /*| TIMER_A_CTL_IE*/;
     TIMER_A0->CCR[0] = 60;      //Total period = 1.25us
     TIMER_A0->CCR[1] = 17;      //time for logic 0 = .35us
-    TIMER_A0->CCR[2] = 34;      //time for logic 1 = .7us
-    TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE;   // TACCR0 interrupt enabled
-    //TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIE;   // TACCR0 interrupt disabled
-    TIMER_A0->CCTL[1] = 0;
-    TIMER_A0->CCTL[2] = TIMER_A_CCTLN_CCIE;   // TACCR2 interrupt enabled
+    TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIE;   // TACCR0 interrupt disabled to start
+    TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIE;   // TACCR1 interrupt disabled to start
 
     /* Enable Interrupts in the NVIC */
     NVIC_EnableIRQ(TA0_0_IRQn);
@@ -55,20 +52,25 @@ void TA0_0_IRQHandler(void){
     if(TIMER_A0->CCTL[0] & BIT0){
         P6->OUT |= BIT0;                    //write the pin high at beginning of cycle
         a_count++;
+        if(color_index < 24){
+            color_index++;
+        }
+        else{
+            color_index = 0;
+            //all 24 bits have been sent, disable interrupts
+            TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIE;
+            TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIE;
+        }
         TIMER_A0->CCTL[0] &= ~BIT0;
-        //TIMER_A0->R = 0;                    //reset count
+
     }
-    //for logic low
+    //logic low
     if(TIMER_A0->CCTL[1] & BIT0){
         P6->OUT &= ~BIT0;            //write the pin low for logic low
         b_count++;
+        TIMER_A0->CCR[1] = color_array[color_index + 1];
         TIMER_A0->CCTL[1] &= ~BIT0;
     }
-    //for logic high
-    if(TIMER_A0->CCTL[2] & BIT0){
-        P6->OUT &= ~BIT0;            //write the pin low for logic high
-        c_count++;
-        TIMER_A0->CCTL[2] &= ~BIT0;
-    }
+
 }
 
